@@ -72,21 +72,24 @@ export const myAttendenceReducer = (state = { attend: {} }, action) => {
     }
 };
 
-export const myEmployeeAttendenceReducer = (state = { attend: [] }, action) => {
+export const myEmployeeAttendenceReducer = (state = { attend: [], isyes: null }, action) => {
     switch (action.type) {
         case GET_SINGLE_ATTENDENCE_REQUEST:
             return {
-                loading: true
+                loading: true,
+                isyes: null
             };
         case GET_SINGLE_ATTENDENCE_SUCCESS:
             return {
                 loading: false,
-                attend: action.payload
+                attend: action.payload,
+                isyes: true
             };
         case GET_SINGLE_ATTENDENCE_FAIL:
             return {
                 loading: false,
-                error: action.payload
+                error: action.payload,
+                isyes: false
             };
         case CLEAR_ERRORS:
             return {

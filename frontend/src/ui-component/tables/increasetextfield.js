@@ -1,11 +1,30 @@
 import { AiFillPlusCircle } from 'react-icons/ai';
 import TextField from '@mui/material/TextField';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { myEmployeeAttendenceOvertime } from '../../store/actions/attendenceAction';
 
-export default function OvertimeInput() {
+export default function OvertimeInput(props) {
+    const { value, employee, date } = props;
+    const dispatch = useDispatch();
+
+    const [val, setval] = React.useState(value);
+    const handleChange = (event) => {
+        setval(event.target.value);
+        dispatch(myEmployeeAttendenceOvertime(employee, date.getMonth() + 1, date.getFullYear(), event.target.value));
+    };
+    console.log(date.getMonth());
+
     return (
         <>
-            <TextField id="outlined-basic" variant="outlined" />
-            <AiFillPlusCircle style={{ width: '40px', height: '40px', color: '#009FBE', margin: '5px' }} />
+            <TextField id="outlined-basic" variant="outlined" value={val} onChange={handleChange} />
+            <AiFillPlusCircle
+                style={{ width: '40px', height: '40px', color: '#009FBE', margin: '5px' }}
+                onClick={() => {
+                    setval(val + 1);
+                    dispatch(myEmployeeAttendenceOvertime(employee, date.getMonth() + 1, date.getFullYear(), val + 1));
+                }}
+            />
         </>
     );
 }

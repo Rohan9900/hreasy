@@ -21,9 +21,9 @@ import { myAttendence } from 'store/actions/attendenceAction';
 const Overtime = () => {
     const dispatch = useDispatch();
     const [page, setPage] = React.useState(1);
-    const { error, attend } = useSelector((state) => state.getAttendence);
-    const [date, setdate] = React.useState(new Date());
+    const { error, attend } = useSelector((state) => state.getSingleEmployeeAttendence);
 
+    const [date, setdate] = React.useState(new Date());
     React.useEffect(() => {
         dispatch(myAttendence(page, date.getMonth(), date.getFullYear()));
         if (error) {
@@ -32,8 +32,6 @@ const Overtime = () => {
         }
     }, [dispatch, page, date]);
 
-    console.log(attend);
-
     const handleChange = (event, value) => {
         setPage(value);
     };
@@ -41,7 +39,7 @@ const Overtime = () => {
         setdate(date);
     };
 
-    console.log(date);
+    console.log(attend);
 
     return (
         <StyledMainCard>
@@ -77,7 +75,7 @@ const Overtime = () => {
                                     <TableCell align="center">{item?.dailyWages}</TableCell>
                                     <TableCell align="center">{item?.overTime}</TableCell>
                                     <TableCell align="center">
-                                        <OvertimeInput employee={item.employee} />
+                                        <OvertimeInput employee={item.employee} date={date} value={item?.overTime} />
                                     </TableCell>
                                 </StyledTableRow>
                             ))}

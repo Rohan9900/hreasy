@@ -104,36 +104,36 @@ exports.myEmployeesAttendance = catchAsyncErrors(async (req, res, next) => {
     count: employeesAttendance.length,
     employeeCount,
     employeesAttendance,
-    length:length
+    length: length,
   });
 });
 
 // Get logged in user single Employee attendance  =>   /api/v1/employees/attendance/list/:id
 
 exports.myEmployeeAttendance = catchAsyncErrors(async (req, res, next) => {
-    const resPerPage = 10;
-    const employeeCount = await EmployeeAttendance.countDocuments(); //Passing the data into frontend
-    const apiFeatures = new APIFeatures(
-      EmployeeAttendance.find({
-        user: req.user.id,
-        attendanceMonth: req.params.month,
-        attendanceYear: req.params.year,
-        employee:req.params.employee
-      }),
-      req.query
-    )
-      .search()
-      .filter()
-      .pagination(resPerPage);
-    const employeesAttendance = await apiFeatures.query;
+  const resPerPage = 10;
+  const employeeCount = await EmployeeAttendance.countDocuments(); //Passing the data into frontend
+  const apiFeatures = new APIFeatures(
+    EmployeeAttendance.find({
+      user: req.user.id,
+      attendanceMonth: req.params.month,
+      attendanceYear: req.params.year,
+      employee: req.params.employee,
+    }),
+    req.query
+  )
+    .search()
+    .filter()
+    .pagination(resPerPage);
+  const employeesAttendance = await apiFeatures.query;
 
-    res.status(200).json({
-      success: true,
-      count: employeesAttendance.length,
-      employeeCount,
-      employeesAttendance,
-    });
+  res.status(200).json({
+    success: true,
+    count: employeesAttendance.length,
+    employeeCount,
+    employeesAttendance,
   });
+});
 
 // Get All Employees | Admin =>/api/v1/admin/employee/attendance/allEmployees
 
@@ -158,7 +158,7 @@ exports.allEmployeesAttendance = catchAsyncErrors(async (req, res, next) => {
 
 exports.updateEmployeeOvertime = catchAsyncErrors(async (req, res, next) => {
   const { attendanceMonth, attendanceYear, overTime } = req.body;
-
+  console.log(attendanceMonth, attendanceYear, overTime);
   let employeeExist = await EmployeeAttendance.findOne({
     employee: req.body.employee,
     attendanceMonth: attendanceMonth,
@@ -186,7 +186,6 @@ exports.updateEmployeeAvailLeave = catchAsyncErrors(async (req, res, next) => {
 
   let employeeExist = await EmployeeAttendance.findOne({
     employee: req.body.employee,
-    attendanceMonth: attendanceMonth,
     attendanceYear: attendanceYear,
     user: user,
   });

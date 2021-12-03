@@ -73,6 +73,7 @@ export const myEmployeeAttendence = (employee, month, year) => async (dispatch) 
         const { data } = await axios.get(`http://localhost:4000/api/v1/employee/attendance/mylist/${month + 1}/${year}/${employee}`, {
             withCredentials: true
         });
+
         dispatch({
             type: GET_SINGLE_ATTENDENCE_SUCCESS,
             payload: data.employeesAttendance[0]
@@ -86,7 +87,7 @@ export const myEmployeeAttendence = (employee, month, year) => async (dispatch) 
 };
 
 // post overtime
-export const myEmployeeAttendenceOvertime = (employee, month, year, overtime) => async (dispatch) => {
+export const myEmployeeAttendenceOvertime = (employee, attendanceMonth, attendanceYear, overTime) => async (dispatch) => {
     axios.defaults.withCredentials = true;
     try {
         dispatch({ type: OVERTIME_ATTENDENCE_REQUEST });
@@ -98,14 +99,10 @@ export const myEmployeeAttendenceOvertime = (employee, month, year, overtime) =>
         };
         const { data } = await axios.post(
             `http://localhost:4000/api/v1/employee/attendance/overtime`,
-            {
-                employee,
-                month,
-                overtime,
-                year
-            },
+            { employee, attendanceMonth, attendanceYear, overTime },
             config
         );
+        console.log(data);
         dispatch({
             type: OVERTIME_ATTENDENCE_SUCCESS,
             payload: data

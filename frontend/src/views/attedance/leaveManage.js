@@ -9,61 +9,84 @@ import Paper from '@mui/material/Paper';
 import AttendanceTopbar from 'ui-component/attendence-topbar';
 import { StyledContainer, StyledMainCard, StyledTable, StyledTableRow, StyledTableCell } from 'ui-component/tables/tablestyle';
 import Pagination from '@mui/material/Pagination';
+import { useDispatch, useSelector } from 'react-redux';
 
-function createData(srno, uanno, name, designation, dailywages, totalleave, availleave, carryleave) {
-    return { srno, uanno, name, designation, dailywages, totalleave, availleave, carryleave };
-}
-
-const rows = [
-    createData(1, 1234, 'virat', 'Engineer', 500, 5, 1, 3),
-    createData(2, 1234, 'virat', 'Engineer', 500, 5, 1, 3),
-    createData(3, 1234, 'virat', 'Engineer', 500, 5, 1, 3),
-    createData(4, 1234, 'virat', 'Engineer', 500, 5, 1, 3),
-    createData(5, 1234, 'virat', 'Engineer', 500, 5, 1, 3),
-    createData(6, 1234, 'virat', 'Engineer', 500, 5, 1, 3)
-];
+import formatDate from 'utils/date-format';
+import { clearErrors } from 'store/actions/userActions';
+import { myAttendence } from 'store/actions/attendenceAction';
 
 // ==============================|| VIEW ATTENDENCE PAGE ||============================== //
 
-const LeaveManage = () => (
-    <StyledMainCard>
-        <AttendanceTopbar name="Manage Leave" csv="true" filter="true" />
-        <Typography variant="body2">
-            <StyledContainer component={Paper}>
-                <StyledTable sx={{ minWidth: 650 }} aria-label="customized table">
-                    <TableHead>
-                        <TableRow>
-                            <StyledTableCell align="center">Sr No.</StyledTableCell>
-                            <StyledTableCell align="center">UAN No.</StyledTableCell>
-                            <StyledTableCell align="center">Name</StyledTableCell>
-                            <StyledTableCell align="center">Designation</StyledTableCell>
-                            <StyledTableCell align="center">Daily wages</StyledTableCell>
-                            <StyledTableCell align="center">Total Leave</StyledTableCell>
-                            <StyledTableCell align="center">Avail Leave</StyledTableCell>
-                            <StyledTableCell align="center">Carry Forward</StyledTableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row) => (
-                            <StyledTableRow key={row.srno} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                <TableCell align="center" component="th" scope="row">
-                                    {row.srno}
-                                </TableCell>
-                                <TableCell align="center">{row.uanno}</TableCell>
-                                <TableCell align="center">{row.name}</TableCell>
-                                <TableCell align="center">{row.designation}</TableCell>
-                                <TableCell align="center">{row.dailywages}</TableCell>
-                                <TableCell align="center">{row.totalleave}</TableCell>
-                                <TableCell align="center">{row.availleave}</TableCell>
-                                <TableCell align="center">{row.carryleave}</TableCell>
-                            </StyledTableRow>
-                        ))}
-                    </TableBody>
-                </StyledTable>
-                <Pagination count={10} color="primary" style={{ float: 'right' }} />
-            </StyledContainer>
-        </Typography>
-    </StyledMainCard>
-);
+const LeaveManage = () => {
+    const dispatch = useDispatch();
+    const [page, setPage] = React.useState(1);
+    const { error, attend } = useSelector((state) => state.getAttendence);
+    const [date, setdate] = React.useState(new Date());
+    React.useEffect(() => {
+        dispatch(myAttendence(page, date.getMonth(), date.getFullYear()));
+        if (error) {
+            console.log(error);
+            dispatch(clearErrors());
+        }
+    }, [dispatch, page, date]);
+
+    const handleChange = (event, value) => {
+        setPage(value);
+    };
+    const handleDate = (date) => {
+        setdate(date);
+    };
+
+    console.log(attend);
+    return (
+        <StyledMainCard>
+            <AttendanceTopbar name="Manage Leave" csv="true" filter="true" parentCallback2={handleDate} />
+            <Typography variant="body2">
+                <StyledContainer component={Paper}>
+                    <StyledTable sx={{ minWidth: 650 }} aria-label="customized table">
+                        <TableHead>
+                            <TableRow>
+                                <StyledTableCell align="center">Sr No.</StyledTableCell>
+                                <StyledTableCell align="center">UAN No.</StyledTableCell>
+                                <StyledTableCell align="center">Name</StyledTableCell>
+                                <StyledTableCell align="center">Phone</StyledTableCell>
+                                <StyledTableCell align="center">Daily wages</StyledTableCell>
+                                <StyledTableCell align="center">Total Leave</StyledTableCell>
+                                <StyledTableCell align="center">Avail Leave</StyledTableCell>
+                                <StyledTableCell align="center">Carry Forward</StyledTableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {attend?.employeesAttendance?.map((item, index) => (
+                                <StyledTableRow
+                                    key={(page - 1) * 10 + index + 1}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <TableCell align="center" component="th" scope="row">
+                                        {(page - 1) * 10 + index + 1}
+                                    </TableCell>
+                                    <TableCell align="center">{item?.UAN}</TableCell>
+                                    <TableCell align="center">{item?.fullName}</TableCell>
+                                    <TableCell align="center">{item?.mobileNo}</TableCell>
+                                    <TableCell align="center">{item?.dailyWages}</TableCell>
+                                    <TableCell align="center">{30}</TableCell>
+                                    <TableCell align="center">{item?.availLeave}</TableCell>
+                                    <TableCell align="center">{30 - item?.availLeave}</TableCell>
+                                </StyledTableRow>
+                            ))}
+                        </TableBody>
+                    </StyledTable>
+                    <Pagination
+                        count={Math.floor(attend?.length / 10) + 1}
+                        color="primary"
+                        style={{ float: 'right' }}
+                        page={page}
+                        onChange={handleChange}
+                    />
+                </StyledContainer>
+            </Typography>
+        </StyledMainCard>
+    );
+};
 
 export default LeaveManage;

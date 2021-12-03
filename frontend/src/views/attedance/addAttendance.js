@@ -24,7 +24,7 @@ const AddAttendance = () => {
     const [page, setPage] = React.useState(1);
     const [disabled, setdisabled] = React.useState(true);
     const { error, orders } = useSelector((state) => state.myEmployee);
-    const [date, setdate] = React.useState(null);
+    const [date, setdate] = React.useState(new Date());
     const [largestpage, setlargestpage] = React.useState(0);
     console.log(orders);
 

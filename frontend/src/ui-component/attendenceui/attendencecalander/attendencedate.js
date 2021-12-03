@@ -83,7 +83,7 @@ export default function Calander() {
             }
         }
     }, [attend, calendarRef, dateclick]);
-
+    console.log(attend);
     return (
         <>
             <div
