@@ -48,7 +48,7 @@ const AddAttendance = () => {
     };
     return (
         <StyledMainCard>
-            <AttendanceTopbar name="Daily Attendance" date="true" filter="true" isshow={1} parentCallback2={handleSwitch} />
+            <AttendanceTopbar name="Daily Attendance" date="true" filter="true" today="true" isshow={1} parentCallback2={handleSwitch} />
             <Typography variant="body2">
                 <StyledContainer>
                     <StyledTable sx={{ minWidth: 650 }} aria-label="customized table">

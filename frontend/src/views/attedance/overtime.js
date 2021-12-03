@@ -21,8 +21,7 @@ import { myAttendence } from 'store/actions/attendenceAction';
 const Overtime = () => {
     const dispatch = useDispatch();
     const [page, setPage] = React.useState(1);
-    const { error, attend } = useSelector((state) => state.getSingleEmployeeAttendence);
-
+    const { error, attend } = useSelector((state) => state.getAttendence);
     const [date, setdate] = React.useState(new Date());
     React.useEffect(() => {
         dispatch(myAttendence(page, date.getMonth(), date.getFullYear()));

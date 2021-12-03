@@ -20,7 +20,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 
 export default function AttendanceTopbar(props) {
-    const { name, filter, date, csv, salary, parentCallback, parentCallback2, isshow } = props;
+    const { name, filter, date, csv, salary, parentCallback, parentCallback2, isshow, today } = props;
 
     const [value, setValue] = React.useState(new Date());
     const [open, setOpen] = React.useState(false);
@@ -85,6 +85,20 @@ export default function AttendanceTopbar(props) {
                         {salary === 'true' && (
                             <StyledTableCell align="center">
                                 <SalaryStatement parentCallback={parentCallback} />
+                            </StyledTableCell>
+                        )}
+                        {today === 'true' && (
+                            <StyledTableCell align="center">
+                                <button
+                                    type="button"
+                                    className="gray-button"
+                                    onClick={() => {
+                                        parentCallback2(value);
+                                        setdisabled(true);
+                                    }}
+                                >
+                                    Today
+                                </button>
                             </StyledTableCell>
                         )}
                     </TableRow>

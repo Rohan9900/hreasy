@@ -15,6 +15,11 @@ import jsPDF from 'jspdf';
 import pdfMake from 'pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import htmlToPdfmake from 'html-to-pdfmake';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { myEmployee } from 'store/actions/employeeAction';
+import formatDate from 'utils/date-format';
+import { clearErrors } from 'store/actions/userActions';
 
 function printDocument() {
     const pdfTable = document.getElementById('capture');
@@ -69,10 +74,21 @@ const ViewSalary = () => {
     const handleClickOpen = () => {
         setOpen('activesidebar');
     };
+    const { error, orders } = useSelector((state) => state.myEmployee);
 
     const handleClose = () => {
         setOpen('inactivesidebar');
     };
+    const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        dispatch(myEmployee(1));
+        if (error) {
+            console.log(error);
+            dispatch(clearErrors());
+        }
+    }, [dispatch]);
+
     return (
         <StyledMainCardSalary>
             <AttendanceTopbar name="Employee Salary List" salary="true" parentCallback={printDocument} />
@@ -136,13 +152,15 @@ const ViewSalary = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>araj</td>
-                            <td>1234567890</td>
-                            <td>Punb124</td>
-                            <td>25000</td>
-                        </tr>
+                        {orders?.employees?.map((item, index) => (
+                            <tr>
+                                <td>{index}</td>
+                                <td>{item.personalDetails.fullName}</td>
+                                <td>{item.bankDetails.accountNo}</td>
+                                <td>{item.bankDetails.ifscCode}</td>
+                                <td>{index}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </div>
