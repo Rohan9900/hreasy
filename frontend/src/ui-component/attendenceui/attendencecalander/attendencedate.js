@@ -21,8 +21,8 @@ export default function Calander() {
 
     const dispatch = useDispatch();
     const { error, attend } = useSelector((state) => state.getSingleEmployeeAttendence);
-    const [year, setyear] = useState(null);
-    const [month, setmonth] = useState(null);
+    const [year, setyear] = useState(2021);
+    const [month, setmonth] = useState(1);
     const [dateclick, setdateclick] = useState(false);
 
     const handleDateClick = (arg) => {

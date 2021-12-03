@@ -80,7 +80,14 @@ const AddAttendance = () => {
                                     <TableCell align="center">{item?.companyDetails?.designation}</TableCell>
                                     <TableCell align="center">{item?.companyDetails?.dailyWages}</TableCell>
                                     <TableCell align="center">
-                                        <BasicSwitch disabled={disabled} data={item} largest={largestpage} page={page} date={date} />
+                                        <BasicSwitch
+                                            disabled={disabled}
+                                            data={item}
+                                            largest={largestpage}
+                                            page={page}
+                                            date={date}
+                                            index={index}
+                                        />
                                     </TableCell>
                                 </StyledTableRow>
                             ))}

@@ -76,7 +76,7 @@ const ViewAttendance = () => {
                                     <TableCell align="center">{row?.overTime}</TableCell>
 
                                     <TableCell align="center">
-                                        <Link to={`/attendance/event/${row.employee}`}>
+                                        <Link to={`/attendance/event/${row.employee}`} target="_blank">
                                             <RemoveRedEyeIcon />
                                         </Link>
                                     </TableCell>

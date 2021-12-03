@@ -8,7 +8,7 @@ import './switch.css';
 
 export default function BasicSwitch(props) {
     const { getInputProps, checked, focusVisible } = useSwitch(props);
-    const { data, date, page, disabled, largest } = props;
+    const { data, date, page, disabled, largest, index } = props;
     const [state, setState] = React.useState(true);
     const dispatch = useDispatch();
     React.useEffect(() => {
@@ -42,7 +42,7 @@ export default function BasicSwitch(props) {
                 designation: data?.companyDetails?.designation,
                 dailyWages: data?.companyDetails?.dailyWages,
                 employeeAttendance: { date: date?.getDate(), attendance: e.target.checked },
-                attendanceMonth: date?.getMonth(),
+                attendanceMonth: date?.getMonth() + 1,
                 attendanceYear: date?.getFullYear(),
                 /* eslint no-underscore-dangle: 0 */
                 employee: data?._id
@@ -55,8 +55,8 @@ export default function BasicSwitch(props) {
 
     return (
         <span>
-            <label className="switch" htmlFor="x">
-                <input type="checkbox" checked={state} onChange={handleSwitchChange} disabled={disabled} id="x" />
+            <label className="switch" htmlFor={`x${index}`}>
+                <input type="checkbox" checked={state} onChange={handleSwitchChange} disabled={disabled} id={`x${index}`} />
                 <span className="slider round" />
             </label>
         </span>

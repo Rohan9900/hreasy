@@ -77,7 +77,7 @@ const Overtime = () => {
                                     <TableCell align="center">{item?.dailyWages}</TableCell>
                                     <TableCell align="center">{item?.overTime}</TableCell>
                                     <TableCell align="center">
-                                        <OvertimeInput />
+                                        <OvertimeInput employee={item.employee} />
                                     </TableCell>
                                 </StyledTableRow>
                             ))}
