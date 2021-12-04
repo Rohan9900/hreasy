@@ -5,7 +5,7 @@ import { addAttendence, myAttendence, myEmployeeAttendence } from '../store/acti
 import './switch.css';
 
 export default function BasicSwitch(props) {
-    const { data, date, page, disabled, largest, index } = props;
+    const { data, date, page, disabled, largest, index, selecttoday } = props;
     const [state, setState] = React.useState(true);
 
     const dispatch = useDispatch();
@@ -17,7 +17,7 @@ export default function BasicSwitch(props) {
                 withCredentials: true
             })
             .then((res) => {
-                if (disabled === false) {
+                if (disabled === false && res.data.employeesAttendance !== undefined) {
                     for (let i = 0; i < res.data.employeesAttendance[0].employeeAttendance.length; i += 1) {
                         if (
                             res.data.employeesAttendance[0].employeeAttendance[i].date === date?.getDate() &&
@@ -49,9 +49,25 @@ export default function BasicSwitch(props) {
                             );
                         }
                     }
+                } else if (disabled === false) {
+                    dispatch(
+                        addAttendence({
+                            UAN: data?.companyDetails?.UAN,
+                            fullName: data?.personalDetails?.fullName,
+                            mobileNo: data?.personalDetails?.mobileNo,
+                            joiningDate: data?.companyDetails?.joiningDate,
+                            designation: data?.companyDetails?.designation,
+                            dailyWages: data?.companyDetails?.dailyWages,
+                            employeeAttendance: { date: date?.getDate(), attendance: true },
+                            attendanceMonth: date?.getMonth() + 1,
+                            attendanceYear: date?.getFullYear(),
+                            /* eslint no-underscore-dangle: 0 */
+                            employee: data?._id
+                        })
+                    );
                 }
             });
-    }, [date, page, disabled]);
+    }, [date, page, disabled, selecttoday]);
 
     const x = true;
     const handleSwitchChange = (e) => {

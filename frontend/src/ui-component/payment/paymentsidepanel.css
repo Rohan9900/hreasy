@@ -6,6 +6,10 @@
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    z-index: 10000000;
+}
+.MuiPaper-root{
+    overflow: visible !important;
 }
 
 .salary-sidepanel-box1 {

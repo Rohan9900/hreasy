@@ -5,7 +5,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 const PaymentSidepanel = (props) => {
-    const { parentCallback } = props;
+    const { parentCallback, data } = props;
     return (
         <div className="salary-sidepanel-container">
             <div className="salary-sidepanel-box1">
@@ -20,15 +20,15 @@ const PaymentSidepanel = (props) => {
                     />
                 </div>
                 <div className="salary-sidepanel-box-head">
-                    <h2>Santosh Padhi</h2>
+                    <h2>{data?.personalDetails?.fullName}</h2>
                     <div className="sidepanel-icon">
                         <span>
                             <BusinessCenterIcon />
-                            <span>Engineer</span>
+                            <span>{data?.companyDetails?.designation}</span>
                         </span>
                         <span>
                             <PhoneIcon />
-                            <span>9723935293</span>
+                            <span>{data?.personalDetails?.mobileNo}</span>
                         </span>
                     </div>
                 </div>
@@ -36,7 +36,7 @@ const PaymentSidepanel = (props) => {
             <div className="salary-sidepanel-box2">
                 <div>
                     <p>UAN No</p>
-                    <b>101607276922</b>
+                    <b>{data?.companyDetails?.UAN}</b>
                 </div>
                 <div>
                     <span style={{ marginLeft: '13px' }}>
@@ -50,7 +50,7 @@ const PaymentSidepanel = (props) => {
                 </div>
                 <div>
                     <p>Daily Wages</p>
-                    <b>890.00</b>
+                    <b>{data?.companyDetails?.dailyWages}</b>
                 </div>
             </div>
             <div className="salary-sidepanel-box3">

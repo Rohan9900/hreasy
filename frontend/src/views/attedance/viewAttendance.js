@@ -59,29 +59,38 @@ const ViewAttendance = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {attend?.employeesAttendance?.map((row, index) => (
-                                <StyledTableRow
-                                    key={(page - 1) * 10 + index + 1}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell align="center" component="th" scope="row">
-                                        {(page - 1) * 10 + index + 1}
-                                    </TableCell>
-                                    <TableCell align="center">{row?.UAN}</TableCell>
-                                    <TableCell align="center">{row?.fullName}</TableCell>
-                                    <TableCell align="center">{formatDate(row?.joiningDate)}</TableCell>
-                                    <TableCell align="center">{row?.designation}</TableCell>
-                                    <TableCell align="center">{row?.dailyWages}</TableCell>
-                                    <TableCell align="center">{row?.employeeAttendance?.length}</TableCell>
-                                    <TableCell align="center">{row?.overTime}</TableCell>
+                            {attend?.employeesAttendance?.map((row, index) => {
+                                let count = 0;
+                                for (let x = 0; x < row?.employeeAttendance?.length; x += 1) {
+                                    if (row?.employeeAttendance[x]?.attendance === true) {
+                                        count += 1;
+                                        console.log('y');
+                                    }
+                                }
+                                return (
+                                    <StyledTableRow
+                                        key={(page - 1) * 10 + index + 1}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell align="center" component="th" scope="row">
+                                            {(page - 1) * 10 + index + 1}
+                                        </TableCell>
+                                        <TableCell align="center">{row?.UAN}</TableCell>
+                                        <TableCell align="center">{row?.fullName}</TableCell>
+                                        <TableCell align="center">{formatDate(row?.joiningDate)}</TableCell>
+                                        <TableCell align="center">{row?.designation}</TableCell>
+                                        <TableCell align="center">{row?.dailyWages}</TableCell>
+                                        <TableCell align="center">{count}</TableCell>
+                                        <TableCell align="center">{row?.overTime}</TableCell>
 
-                                    <TableCell align="center">
-                                        <Link to={`/attendance/event/${row.employee}`} target="_blank">
-                                            <RemoveRedEyeIcon />
-                                        </Link>
-                                    </TableCell>
-                                </StyledTableRow>
-                            ))}
+                                        <TableCell align="center">
+                                            <Link to={`/attendance/event/${row.employee}`} target="_blank">
+                                                <RemoveRedEyeIcon />
+                                            </Link>
+                                        </TableCell>
+                                    </StyledTableRow>
+                                );
+                            })}
                         </TableBody>
                     </StyledTable>
                     <Pagination

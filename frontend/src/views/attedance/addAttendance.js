@@ -26,6 +26,7 @@ const AddAttendance = () => {
     const { error, orders } = useSelector((state) => state.myEmployee);
     const [date, setdate] = React.useState(new Date());
     const [largestpage, setlargestpage] = React.useState(0);
+    const [selecttoday, setselecttoday] = React.useState(false);
     console.log(orders);
 
     React.useEffect(() => {
@@ -42,9 +43,10 @@ const AddAttendance = () => {
         }
         setPage(value);
     };
-    const handleSwitch = (date) => {
+    const handleSwitch = (date, x) => {
         setdisabled(false);
         setdate(date);
+        setselecttoday(x);
     };
     return (
         <StyledMainCard>
@@ -87,6 +89,7 @@ const AddAttendance = () => {
                                             page={page}
                                             date={date}
                                             index={index}
+                                            selecttoday={selecttoday}
                                         />
                                     </TableCell>
                                 </StyledTableRow>

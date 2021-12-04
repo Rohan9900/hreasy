@@ -51,18 +51,6 @@ function printDocument() {
     pdfMake.createPdf(documentDefinition).download();
 }
 
-function createData(srno, uanno, name, dailywages, paiddays, accountno, netsalary, viewsalary) {
-    return { srno, uanno, name, dailywages, paiddays, accountno, netsalary, viewsalary };
-}
-
-const rows = [
-    createData(1, 1234, 'virat', 500, 30, 1234567890, 5),
-    createData(2, 1234, 'virat', 500, 30, 1234567890, 5),
-    createData(3, 1234, 'virat', 500, 30, 1234567890, 5),
-    createData(4, 1234, 'virat', 500, 30, 1234567890, 5),
-    createData(5, 1234, 'virat', 500, 30, 1234567890, 5),
-    createData(6, 1234, 'virat', 500, 30, 1234567890, 5)
-];
 // const Transition = React.forwardRef(function Transition(props, ref) {
 //     return <Slide direction="up" ref={ref} {...props} />;
 // });
@@ -70,78 +58,102 @@ const rows = [
 
 const ViewSalary = () => {
     const [open, setOpen] = React.useState('inactivesidebar');
-
-    const handleClickOpen = () => {
+    const [page, setPage] = React.useState(1);
+    const [date, setdate] = React.useState(new Date());
+    const [data, setdata] = React.useState({});
+    const handleClickOpen = (item) => {
         setOpen('activesidebar');
+        setdata(item);
     };
     const { error, orders } = useSelector((state) => state.myEmployee);
-
     const handleClose = () => {
         setOpen('inactivesidebar');
     };
     const dispatch = useDispatch();
 
     React.useEffect(() => {
-        dispatch(myEmployee(1));
+        dispatch(myEmployee(page));
         if (error) {
             console.log(error);
             dispatch(clearErrors());
         }
-    }, [dispatch]);
+    }, [dispatch, page]);
 
+    const handleChange = (event, value) => {
+        setPage(value);
+    };
+    const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
     return (
-        <StyledMainCardSalary>
-            <AttendanceTopbar name="Employee Salary List" salary="true" parentCallback={printDocument} />
-            <Typography variant="body2">
-                <StyledContainer component={Paper}>
-                    <StyledTable sx={{ minWidth: 650 }} aria-label="customized table">
-                        <TableHead>
-                            <TableRow>
-                                <StyledTableCell align="center">Sr No.</StyledTableCell>
-                                <StyledTableCell align="center">UAN No.</StyledTableCell>
-                                <StyledTableCell align="center">Name</StyledTableCell>
-                                <StyledTableCell align="center">Daily wages</StyledTableCell>
-                                <StyledTableCell align="center">Paid Days</StyledTableCell>
-                                <StyledTableCell align="center">Account No</StyledTableCell>
-                                <StyledTableCell align="center">Net Salary</StyledTableCell>
-                                <StyledTableCell align="center">View Salary</StyledTableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows.map((row) => (
-                                <StyledTableRow key={row.srno} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                    <TableCell align="center" component="th" scope="row">
-                                        {row.srno}
-                                    </TableCell>
-                                    <TableCell align="center">{row.uanno}</TableCell>
-                                    <TableCell align="center">{row.name}</TableCell>
-                                    <TableCell align="center">{row.dailywages}</TableCell>
-                                    <TableCell align="center">{row.paiddays}</TableCell>
-                                    <TableCell align="center">{row.accountno}</TableCell>
-                                    <TableCell align="center">{row.netsalary}</TableCell>
-                                    <TableCell align="center">
-                                        <TableViewOutlinedIcon onClick={handleClickOpen} style={{ cursor: 'pointer' }} />
-                                    </TableCell>
-                                </StyledTableRow>
-                            ))}
-                        </TableBody>
-                    </StyledTable>
-                    <Pagination count={10} color="primary" style={{ float: 'right' }} />
-                </StyledContainer>
-            </Typography>
-            <div className={`view-salary-sidebar ${open}`}>
+        <>
+            <StyledMainCardSalary>
+                <AttendanceTopbar name="Employee Salary List" salary="true" parentCallback={printDocument} />
                 <Typography variant="body2">
-                    <PaymentSidepanel parentCallback={handleClose} />
+                    <StyledContainer component={Paper}>
+                        <StyledTable sx={{ minWidth: 650 }} aria-label="customized table">
+                            <TableHead>
+                                <TableRow>
+                                    <StyledTableCell align="center">Sr No.</StyledTableCell>
+                                    <StyledTableCell align="center">UAN No.</StyledTableCell>
+                                    <StyledTableCell align="center">Name</StyledTableCell>
+                                    <StyledTableCell align="center">Daily wages</StyledTableCell>
+                                    <StyledTableCell align="center">Paid Days</StyledTableCell>
+                                    <StyledTableCell align="center">Account No</StyledTableCell>
+                                    <StyledTableCell align="center">Net Salary</StyledTableCell>
+                                    <StyledTableCell align="center">View Salary</StyledTableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {orders?.employees?.map((item, index) => (
+                                    <StyledTableRow
+                                        key={(page - 1) * 10 + index + 1}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell align="center" component="th" scope="row">
+                                            {(page - 1) * 10 + index + 1}
+                                        </TableCell>
+                                        <TableCell align="center">{item?.companyDetails?.UAN}</TableCell>
+                                        <TableCell align="center">{item?.personalDetails?.fullName}</TableCell>
+                                        <TableCell align="center">{item?.companyDetails?.dailyWages}</TableCell>
+                                        <TableCell align="center">{30}</TableCell>
+                                        <TableCell align="center">{item?.bankDetails?.accountNo}</TableCell>
+                                        <TableCell align="center">{30 * item?.companyDetails?.dailyWages}</TableCell>
+                                        <TableCell align="center">
+                                            <TableViewOutlinedIcon
+                                                onClick={() => {
+                                                    handleClickOpen(item);
+                                                }}
+                                                style={{ cursor: 'pointer' }}
+                                            />
+                                        </TableCell>
+                                    </StyledTableRow>
+                                ))}
+                            </TableBody>
+                        </StyledTable>
+                        <Pagination
+                            count={Math.floor(orders?.employeeCount / 10) + 1}
+                            color="primary"
+                            style={{ float: 'right' }}
+                            page={page}
+                            onChange={handleChange}
+                        />
+                    </StyledContainer>
                 </Typography>
-            </div>
+                <div className={`view-salary-sidebar ${open}`}>
+                    <Typography variant="body2">
+                        <PaymentSidepanel data={data} parentCallback={handleClose} />
+                    </Typography>
+                </div>
+            </StyledMainCardSalary>
             <div id="capture" style={{ display: 'none' }}>
-                <table style={{ textAlign: 'center' }} width="100%">
+                <table style={{ textAlign: 'center', width: '100%' }} width="100%">
                     <thead>
                         <tr>
                             <td colSpan="5">Total HR</td>
                         </tr>
                         <tr>
-                            <td colSpan="5">Bank Statement Salary Disbursement Sep-21</td>
+                            <td colSpan="5">
+                                Bank Statement Salary Disbursement {month[date.getMonth()]}-{date.getDate()}
+                            </td>
                         </tr>
                         <tr>
                             <th>Sr No</th>
@@ -154,17 +166,17 @@ const ViewSalary = () => {
                     <tbody>
                         {orders?.employees?.map((item, index) => (
                             <tr>
-                                <td>{index}</td>
+                                <td>{index + 1}</td>
                                 <td>{item.personalDetails.fullName}</td>
                                 <td>{item.bankDetails.accountNo}</td>
                                 <td>{item.bankDetails.ifscCode}</td>
-                                <td>{index}</td>
+                                <td />
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-        </StyledMainCardSalary>
+        </>
     );
 };
 

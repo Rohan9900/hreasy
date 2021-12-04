@@ -93,7 +93,7 @@ export default function AttendanceTopbar(props) {
                                     type="button"
                                     className="gray-button"
                                     onClick={() => {
-                                        parentCallback2(value);
+                                        parentCallback2(value, true);
                                         setdisabled(true);
                                     }}
                                 >
@@ -114,7 +114,7 @@ export default function AttendanceTopbar(props) {
                 <DialogActions>
                     <Button
                         onClick={() => {
-                            parentCallback2(value);
+                            parentCallback2(value, false);
                             handleClose();
                             setdisabled(true);
                         }}
